@@ -1,7 +1,6 @@
 import os
 from glob import glob
 
-import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 from sklearn.model_selection import train_test_split
@@ -32,9 +31,13 @@ def load_dataset(source='./data', train_proportion=0.8):
             X.append(image)
             y.append(NON_SMILE)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=train_proportion, random_state=42)
+    X = np.array(X)
+    y = np.array(y)
 
-    return X_train, y_train, X_test, y_test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=train_proportion, random_state=42)
+    X_train, X_valid, y_train, y_valid = train_test_split(X_train, y_train, test_size=0.1, random_state=42)
+
+    return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 
 def _load_image_names(path):
